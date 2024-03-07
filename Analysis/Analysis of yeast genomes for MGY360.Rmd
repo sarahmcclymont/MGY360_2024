@@ -168,8 +168,8 @@ exit 0
 ```
 
 Output: BAM and BAI files for each library. BAM files are sorted and duplicates have been flagged. BAIs are indices for visualization later. Figure out a way to upload these to UCSC so everyone has access to their tracks for looking at their variants. Too big for GitHub.
-
-Output: MultiQC report. 
+Output: Alignment stats for each library. Upload to GitHub.
+Output: MultiQC report (alignment_dups_multiqc_report.html) summarizing the alignment and deduplication stats. Look at this for problem libraries.
 
 % alignment: Pretty much all 95+% - there are 2 libraries of concern. One is B04, which was flagged above. 0% alignment. BLAST'ed some reads from that library - all staph. Another is E09, which has 61.1% alignment. Something funny with that library. Contamination? 
 
