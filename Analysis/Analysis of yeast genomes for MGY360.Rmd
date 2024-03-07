@@ -86,8 +86,8 @@ exit 0
 
 ```
 
-Output: Individual FASTQC reports. Share with class.
-Output: MultiQC report summary. Transfer multiQC report off of cluster. Look at plots in the HTML. 
+Output: Individual FASTQC reports. Share with class on GitHub.
+Output: MultiQC report summary (fastQC_multiqc_report.html). Look at plots in the HTML to assess overall quality. 
 
 **Conclusions:** Look good in general. 
 
@@ -105,9 +105,6 @@ B04 - Weird GC content (%GC = 34% instead of 40%), very high duplication rate (2
 C04: Low sequencing depth. Just under 400k reads instead of 3M+. Primer contam? B10 is also a little low (800k reads)
 
 --> Move forward with mapping! No need to trim reads or adapters, just one library of concern to keep our eye on (B04).
-
-
-
 
 # Align to yeast genome
 
@@ -170,7 +167,7 @@ exit 0
 
 ```
 
-Output: BAM and BAI files for each library. BAM files are sorted and duplicates have been flagged. BAIs are indices for visualization later. Figure out a way to upload these so everyone has access to their tracks for looking at their variants.
+Output: BAM and BAI files for each library. BAM files are sorted and duplicates have been flagged. BAIs are indices for visualization later. Figure out a way to upload these to UCSC so everyone has access to their tracks for looking at their variants. Too big for GitHub.
 
 Output: MultiQC report. 
 
