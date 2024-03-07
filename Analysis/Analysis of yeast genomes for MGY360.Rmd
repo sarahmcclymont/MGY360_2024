@@ -1,0 +1,210 @@
+---
+title: "Analysis of yeast genomes for MGY360"
+author: "Sarah McClymont"
+date: "March 2024"
+output: pdf_document
+---
+
+# Intro 
+
+For the MGY360 class, we have generated Nextera DNA libraries in mutant azole-resistant yeast strains and sequenced them. Our goal is to find the causative mutation for the clotrimazole resistance and explore the mechanism behind that resistance. 
+
+We have generated 43 sequencing libraries: 35 libraries of mutants, 8 libraries of their parents 
+
+The general plan is to:
+	1) Perform quality control on the sequencing results 
+	2) Align to the yeast genome 
+	3) Perform quality control on the alignment 
+	4) Identify variants in both the mutant and parent compared to the reference 
+	5) Filter the variants for presence/absence in parent vs mutant
+	6) Manually curate the list of variants to identify the most likely causative mutations 
+	7) Perform literature searches to explore how these variants could be causing our phenotype of interest
+	
+# The files 
+
+```{r, eval = F}
+
+# Files are located in /home/ltri/santoslab/smcclymo/MGY360
+# Files: 
+# Andrews_001_Strip1_A01_Carolyn_S1_R1_001.fastq.gz      Andrews_015_Strip2_D04_Hedieh__S15_R2_001.fastq.gz   Andrews_030_Strip4_A08_Shivanshi_S30_R1_001.fastq.gz
+# Andrews_001_Strip1_A01_Carolyn_S1_R2_001.fastq.gz      Andrews_016_Strip2_E04_Ron_S16_R1_001.fastq.gz       Andrews_030_Strip4_A08_Shivanshi_S30_R2_001.fastq.gz
+# Andrews_002_Strip1_B01_Carolyn__S2_R1_001.fastq.gz     Andrews_016_Strip2_E04_Ron_S16_R2_001.fastq.gz       Andrews_031_Strip4_B08_Shivanshi_S31_R1_001.fastq.gz
+# Andrews_002_Strip1_B01_Carolyn__S2_R2_001.fastq.gz     Andrews_017_Strip3_F04_Ahwar__S17_R1_001.fastq.gz    Andrews_031_Strip4_B08_Shivanshi_S31_R2_001.fastq.gz
+# Andrews_003_Strip1_C01_Emine_S3_R1_001.fastq.gz        Andrews_017_Strip3_F04_Ahwar__S17_R2_001.fastq.gz    Andrews_032_Strip4_C08_Caroline__S32_R1_001.fastq.gz
+# Andrews_003_Strip1_C01_Emine_S3_R2_001.fastq.gz        Andrews_018_Strip3_A05_Sarah_S18_R1_001.fastq.gz     Andrews_032_Strip4_C08_Caroline__S32_R2_001.fastq.gz
+# Andrews_004_Strip1_D01_Jessie_S4_R1_001.fastq.gz       Andrews_018_Strip3_A05_Sarah_S18_R2_001.fastq.gz     Andrews_033_Strip5_D08_Naomi__S33_R1_001.fastq.gz
+# Andrews_004_Strip1_D01_Jessie_S4_R2_001.fastq.gz       Andrews_019_Strip3_B05_Naomi__S19_R1_001.fastq.gz    Andrews_033_Strip5_D08_Naomi__S33_R2_001.fastq.gz
+# Andrews_005_Strip1_E01_Isabella__S5_R1_001.fastq.gz    Andrews_019_Strip3_B05_Naomi__S19_R2_001.fastq.gz    Andrews_034_Strip5_E08_Ayouni__S34_R1_001.fastq.gz
+# Andrews_005_Strip1_E01_Isabella__S5_R2_001.fastq.gz    Andrews_020_Strip3_C05_Anisha_S20_R1_001.fastq.gz    Andrews_034_Strip5_E08_Ayouni__S34_R2_001.fastq.gz
+# Andrews_006_Strip1_F01_Amelia__S6_R1_001.fastq.gz      Andrews_020_Strip3_C05_Anisha_S20_R2_001.fastq.gz    Andrews_035_Strip5_F08_Jerry_S35_R1_001.fastq.gz
+# Andrews_006_Strip1_F01_Amelia__S6_R2_001.fastq.gz      Andrews_021_Strip3_D05_Chiara__S21_R1_001.fastq.gz   Andrews_035_Strip5_F08_Jerry_S35_R2_001.fastq.gz
+# Andrews_007_Strip1_A02_Maia_S7_R1_001.fastq.gz         Andrews_021_Strip3_D05_Chiara__S21_R2_001.fastq.gz   Andrews_036_Strip5_A09_Megan_S36_R1_001.fastq.gz
+# Andrews_007_Strip1_A02_Maia_S7_R2_001.fastq.gz         Andrews_022_Strip3_E05_Mohamad__S22_R1_001.fastq.gz  Andrews_036_Strip5_A09_Megan_S36_R2_001.fastq.gz
+# Andrews_008_Strip1_C02_Stephanie_S8_R1_001.fastq.gz    Andrews_022_Strip3_E05_Mohamad__S22_R2_001.fastq.gz  Andrews_037_Strip5_B09_Megan__S37_R1_001.fastq.gz
+# Andrews_008_Strip1_C02_Stephanie_S8_R2_001.fastq.gz    Andrews_023_Strip3_F05_Vicky__S23_R1_001.fastq.gz    Andrews_037_Strip5_B09_Megan__S37_R2_001.fastq.gz
+# Andrews_009_Strip2_D02_Jenny_S9_R1_001.fastq.gz        Andrews_023_Strip3_F05_Vicky__S23_R2_001.fastq.gz    Andrews_038_Strip5_C09_Cindy__S38_R1_001.fastq.gz
+# Andrews_009_Strip2_D02_Jenny_S9_R2_001.fastq.gz        Andrews_024_Strip3_A06_Larissa_S24_R1_001.fastq.gz   Andrews_038_Strip5_C09_Cindy__S38_R2_001.fastq.gz
+# Andrews_010_Strip2_E02_Maia_S10_R1_001.fastq.gz        Andrews_024_Strip3_A06_Larissa_S24_R2_001.fastq.gz   Andrews_039_Strip5_D09_Jade__S39_R1_001.fastq.gz
+# Andrews_010_Strip2_E02_Maia_S10_R2_001.fastq.gz        Andrews_025_Strip4_B06_Mia__S25_R1_001.fastq.gz      Andrews_039_Strip5_D09_Jade__S39_R2_001.fastq.gz
+# Andrews_011_Strip2_F02_Jana_S11_R1_001.fastq.gz        Andrews_025_Strip4_B06_Mia__S25_R2_001.fastq.gz      Andrews_040_Strip5_E09_Aahmad__S40_R1_001.fastq.gz
+# Andrews_011_Strip2_F02_Jana_S11_R2_001.fastq.gz        Andrews_026_Strip4_C06_Cathlin__S26_R1_001.fastq.gz  Andrews_040_Strip5_E09_Aahmad__S40_R2_001.fastq.gz
+# Andrews_012_Strip2_A04_Ron_S12_R1_001.fastq.gz         Andrews_026_Strip4_C06_Cathlin__S26_R2_001.fastq.gz  Andrews_041_Strip6_F09_Jian_Rong__S41_R1_001.fastq.gz
+# Andrews_012_Strip2_A04_Ron_S12_R2_001.fastq.gz         Andrews_027_Strip4_D06_Larissa_S27_R1_001.fastq.gz   Andrews_041_Strip6_F09_Jian_Rong__S41_R2_001.fastq.gz
+# Andrews_013_Strip2_B04_Elli__S13_R1_001.fastq.gz       Andrews_027_Strip4_D06_Larissa_S27_R2_001.fastq.gz   Andrews_042_Strip7_A10_Alisha_S42_R1_001.fastq.gz
+# Andrews_013_Strip2_B04_Elli__S13_R2_001.fastq.gz       Andrews_028_Strip4_E06_Alina__S28_R1_001.fastq.gz    Andrews_042_Strip7_A10_Alisha_S42_R2_001.fastq.gz
+# Andrews_014_Strip2_C04_Anastasia__S14_R1_001.fastq.gz  Andrews_028_Strip4_E06_Alina__S28_R2_001.fastq.gz    Andrews_043_Strip8_B10_Alisha_S43_R1_001.fastq.gz
+# Andrews_014_Strip2_C04_Anastasia__S14_R2_001.fastq.gz  Andrews_029_Strip4_F06_Adriana__S29_R1_001.fastq.gz  Andrews_043_Strip8_B10_Alisha_S43_R2_001.fastq.gz
+# Andrews_015_Strip2_D04_Hedieh__S15_R1_001.fastq.gz     Andrews_029_Strip4_F06_Adriana__S29_R2_001.fastq.gz 
+
+```
+
+# Pre-alignment QC
+
+Use FastQC to check library quality. Summarize FastQC reports with MultiQC and check the generated HTML for sequencing quality issues.
+
+```{r, eval = F}
+
+# batch script: fastqc.sh
+
+#!/bin/bash
+#SBATCH --job-name=fastqc
+#SBATCH -N 1
+#SBATCH -n 10
+
+# FastQC v0.11.9
+fastqc -t 10 *.fastq.gz
+
+# Generate report with MultiQC
+## pip3 install --user multiqc #v1.13
+multiqc .
+
+# Clean up files
+mkdir FastQC
+mv *fastqc* FastQC
+
+exit 0
+
+```
+
+Output: Individual FASTQC reports. Share with class.
+Output: MultiQC report summary. Transfer multiQC report off of cluster. Look at plots in the HTML. 
+
+**Conclusions:** Look good in general. 
+
+Quality across reads: Uniformly high. Drops into "yellow" at ends of all reads, but expected with 150bp read length. 
+Quality averaged per read: High. Most 30+
+Sequence bias: As always, all samples have sequence composition bias at the start of reads, as per usual for Tn5. Nothing of concern here.
+GC content: Correct for yeast genome average.
+N content: None to speak of. Good sequencing run. No dead flow cell spots.
+Seq length: All 150, as expected
+Seq duplication: Generally pretty good. A few libraries are going to lose a fair chunk of their reads to this, but should still have enough to call vars
+Adapter content: Only a few managed to stay in the green zone. Everyone pretty much has approx 10-30% of their reads ending in adapters. Probably cut the DNA too short. Could consider in future iterations of class decreasing transposase time, increasing DNA input, or titrating Tn5 concentration to prevent tagmentation below 100bp. 
+
+**Samples that are a little wonky:**
+B04 - Weird GC content (%GC = 34% instead of 40%), very high duplication rate (20% of sequences are present 10-100 times)
+C04: Low sequencing depth. Just under 400k reads instead of 3M+. Primer contam? B10 is also a little low (800k reads)
+
+--> Move forward with mapping! No need to trim reads or adapters, just one library of concern to keep our eye on (B04).
+
+
+
+
+# Align to yeast genome
+
+Use Bowtie2 to align to yeast genome.  
+Deduplicate with Picard Tools. 
+Index with SAMtools. 
+
+Summarize reports with MultiQC.   
+
+```{r, eval = F}
+
+# alignment.sh
+
+#!/bin/bash
+#SBATCH --job-name=alignment
+#SBATCH -N 1
+#SBATCH -n 12
+
+# Define path to genome indices, downloaded from Bowtie2 website, Feb 2024
+  genome_index=/home/ltri/santoslab/smcclymo/MGY360/R64-1-1/R64-1-1 
+
+  
+for file in *R1_001.fastq.gz; do
+
+# Make life easier by making the file names simpler and into an extensionlesss variable
+# Remove the ends of the names 
+	sample=${file%_R1_001.fastq.gz}
+# Strip off the first 19 characters
+	sample2=${sample:19}
+
+# Write out sample name so can track progress/errors in slurm.out file
+  echo $sample2
+
+# Align with Bowtie2 v2.4.2
+  # Local alignment to softclip the ends
+  # Increase pair distance to 800
+  # Write out alignment stats (stderr) to file for multiqc summary
+  bowtie2 -p 12 --local -X 800 -x $genome_index -1 $file -2 ${sample}_R2_001.fastq.gz -S ${sample2}.sam 2>${sample2}.align.stats
+
+# Convert to bam and sort with samtools v1.11
+  # view -bu turns into uncompressed bam for easy piping into sort
+  samtools view -bu ${sample2}.sam | samtools sort -o ${sample2}_sorted.bam
+
+# Deduplicate with picard tools v2.26.11
+  picard MarkDuplicates I=${sample2}_sorted.bam O=${sample2}.bam M=${sample2}_markdup.stats
+
+# Index with samtools
+  samtools index ${sample2}.bam
+
+# Remove intermediate files
+	${sample2}.sam
+	${sample2}_sorted.bam
+	
+done 
+
+# Summarize alignment stats with multiQC 
+multiqc . --ignore "FastQC/"
+
+exit 0	
+
+```
+
+Output: BAM and BAI files for each library. BAM files are sorted and duplicates have been flagged. BAIs are indices for visualization later. Figure out a way to upload these so everyone has access to their tracks for looking at their variants.
+
+Output: MultiQC report. 
+
+% alignment: Pretty much all 95+% - there are 2 libraries of concern. One is B04, which was flagged above. 0% alignment. BLAST'ed some reads from that library - all staph. Another is E09, which has 61.1% alignment. Something funny with that library. Contamination? 
+
+	Investigating: To get the unmapped reads use samtools (flag 4 = unmapped): samtools view -f 4 [file].bam > unmapped_reads_[sample].sam
+	Open the SAM file and copy some of the reads to send to BLAST. Not getting any matches. 
+	If I allow a lot of mismatches (discontiguous megablast), it actually matches with yeast??? 
+	Do notice: There's a LOT of repeats and N's. Sample bad? It looked fine in the FASTQC report, but this is telling a different story.... Not sure what's up. Move forward with the reads we've got, but keep an eye out. 	
+	
+% Duplication: Very little. All under 5% 
+
+# Check alignment 
+	
+Look at the mapping quality distribution, fragment length distribution, and genome coverage for each library. 
+Use Qualimap BAMQC (v2.3) and summarize with multiqc.
+
+```{r, eval = F}
+
+# qualimap.sh
+
+#!/bin/bash
+#SBATCH --job-name=qualimap
+
+for file in *.bam; do
+
+/home/ltri/santoslab/share/software/Qualimap/qualimap_v2.3/qualimap bamQC -bam $file -outfile ${file%.bam}_qualimap.report
+
+done
+
+# Summarzie with multiQC
+
+```
+
+Output: PDF reports for each library. Share with class. 
+
+
