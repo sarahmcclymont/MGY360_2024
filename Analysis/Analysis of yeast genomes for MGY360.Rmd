@@ -58,7 +58,7 @@ The general plan is to:
 
 ```
 
-# Pre-alignment QC
+# 1) Pre-alignment QC
 
 Use FastQC to check library quality. Summarize FastQC reports with MultiQC and check the generated HTML for sequencing quality issues.
 
@@ -106,7 +106,7 @@ C04: Low sequencing depth. Just under 400k reads instead of 3M+. Primer contam? 
 
 --> Move forward with mapping! No need to trim reads or adapters, just one library of concern to keep our eye on (B04).
 
-# Align to yeast genome
+# 2) Align to yeast genome
 
 Use Bowtie2 to align to yeast genome.  
 Deduplicate with Picard Tools. 
@@ -180,7 +180,7 @@ Output: MultiQC report (alignment_dups_multiqc_report.html) summarizing the alig
 	
 % Duplication: Very little. All under 5% 
 
-# Check alignment 
+# 3) Check alignment 
 	
 Look at the mapping quality distribution, fragment length distribution, and genome coverage for each library. 
 Use Qualimap BAMQC (v2.3) and summarize with multiqc.
@@ -193,15 +193,36 @@ Use Qualimap BAMQC (v2.3) and summarize with multiqc.
 #SBATCH --job-name=qualimap
 
 for file in *.bam; do
+# Use qualimap bamQC tool 
+# Make outdir called qualimap and make sure the format is HTML so multiqc can summarize properly. Can't read PDFs
 
-/home/ltri/santoslab/share/software/Qualimap/qualimap_v2.3/qualimap bamQC -bam $file -outfile ${file%.bam}_qualimap.report
+/home/ltri/santoslab/share/software/Qualimap/qualimap_v2.3/qualimap bamQC -bam $file -outdir ${file%.bam}_qualimap -outformat HTML -outfile ${file%.bam}_qualimap.report
 
 done
 
-# Summarzie with multiQC
+# Summarize with multiQC
+multiqc . --ignore "FastQC/" --ignore "markdup/" --ignore "alignment_stats/"
+
+exit 0
 
 ```
 
 Output: PDF reports for each library. Share with class. 
 
+# 4) Call variants
+
+We need to identify all the variants in both the parental and mutant yeast strains. Eventually will compare the list and filter to only look at ones that are in the mutant, but to do that, we need the parental variation too. 
+
+Use bcftools mpileup and bcftools call to get a list of variant sites. 
+
+```{r}
+ 
+for file in *.bam; do 
+
+bcftools mpileup 
+
+
+
+
+```
 
