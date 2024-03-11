@@ -213,10 +213,20 @@ Output: PDF reports for each library. Share with class.
 
 We need to identify all the variants in both the parental and mutant yeast strains. Eventually will compare the list and filter to only look at ones that are in the mutant, but to do that, we need the parental variation too. 
 
-Use bcftools mpileup and bcftools call to get a list of variant sites. 
+Use bcftools mpileup and bcftools call (v1.9) to get a list of variant sites. 
 
 ```{r, eval = F}
  
+# This command relies on knowing the ploidy of the yeasts. Samples with 4, 5, 6 in the name are diploid. 
+# Move BAMs with *04*, *05*, *06* to a new directory called ploidy2
+mv *04*.bam* ploidy2/
+mv *05*.bam* ploidy2/  
+mv *06*.bam* ploidy2/
+# Move the remaining BAMs to a new directory called ploidy1 
+mv *.bam* ploidy1/
+  
+# In the ploidy1 directory, run the following script:   
+
 #!/bin/bash
 #SBATCH --job-name=VCF
 
@@ -229,5 +239,34 @@ done
 
 exit 0
 
+# In the ploidy2 directory, run the following: 
+
+#!/bin/bash
+#SBATCH --job-name=VCF
+
+for file in *.bam; do
+
+bcftools mpileup -f Saccharomyces_cerevisiae.R64-1-1.dna.toplevel.fa $file -o ${file%.bam}.vcf
+bcftools call --ploidy-file ploidy2_file -O v -vc ${file%.bam}.vcf -o ${file%.bam}_vars.vcf
+
+done
+
+exit 0
+
+# Where the contents of teh ploidy2_file are: 
+#*  * *     * 2
+
+# Link the VCFs in a folder all together again (ln -s)
+
+# Fix the first column so that it isn't just "I" and "II" but is "chrI" and "chrII." 
+for file in *.vcf; do
+# Starting at the 49th line, append "chr" to the front of each row
+awk 'NR>49 {print "chr"$0}' $file > intermediate.vcf
+# Add back in the header 
+head -n 48 $file > header.temp
+cat header.temp intermediate.vcf > ${file%_vars.vcf}.vcf
+done
+
 ```
 
+Export the variant calls in VCF format. Upload to GitHub. 
