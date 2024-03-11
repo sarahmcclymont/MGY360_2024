@@ -44,7 +44,7 @@
 ##INFO=<ID=HWE,Number=1,Type=Float,Description="Chi^2 based HWE test P-value based on G3">
 ##INFO=<ID=DP4,Number=4,Type=Integer,Description="Number of high-quality ref-forward , ref-reverse, alt-forward and alt-reverse bases">
 ##bcftools_callVersion=1.9+htslib-1.9
-##bcftools_callCommand=call --ploidy 1 -O v -vc -o D01_Jessie_S4_vars.vcf D01_Jessie_S4.vcf; Date=Mon Mar 11 11:57:49 2024
+##bcftools_callCommand=call --ploidy 1 -O v -vc -o D01_Jessie_S4_vars.vcf D01_Jessie_S4.vcf; Date=Mon Mar 11 19:27:38 2024
 #CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	D01_Jessie_S4.bam
 chrI	25340	.	C	A	112.006	.	DP=48;VDB=0.669861;SGB=-0.693146;MQSB=0.0364427;MQ0F=0.0208333;AF1=1;AC1=1;DP4=0,0,28,15;MQ=15;FQ=-999	GT:PL	1:142,0
 chrI	25488	.	G	A,T,C	100.006	.	DP=75;VDB=0.992554;SGB=-0.693147;RPB=0.528174;MQB=2.81173e-05;MQSB=5.86689e-05;BQB=0.966009;MQ0F=0.0266667;AF1=1;AC1=1;DP4=10,0,20,31;MQ=13;FQ=-999;PV4=0.000333178,1,1,0.0733179	GT:PL	1:130,59,0,139,84,129,147,108,136,129
