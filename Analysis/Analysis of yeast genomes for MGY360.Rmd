@@ -215,14 +215,19 @@ We need to identify all the variants in both the parental and mutant yeast strai
 
 Use bcftools mpileup and bcftools call to get a list of variant sites. 
 
-```{r}
+```{r, eval = F}
  
-for file in *.bam; do 
+#!/bin/bash
+#SBATCH --job-name=VCF
 
-bcftools mpileup 
+for file in *.bam; do
 
+bcftools mpileup -f Saccharomyces_cerevisiae.R64-1-1.dna.toplevel.fa $file -o ${file%.bam}.vcf
+bcftools call --ploidy 1 -O v -vc ${file%.bam}.vcf -o ${file%.bam}_vars.vcf
 
+done
 
+exit 0
 
 ```
 

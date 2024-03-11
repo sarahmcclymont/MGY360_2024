@@ -1,0 +1,70 @@
+##fileformat=VCFv4.2
+##FILTER=<ID=PASS,Description="All filters passed">
+##bcftoolsVersion=1.9+htslib-1.9
+##bcftoolsCommand=mpileup -f Saccharomyces_cerevisiae.R64-1-1.dna.toplevel.fa -o B04_Elli__S13.vcf B04_Elli__S13.bam
+##reference=file://Saccharomyces_cerevisiae.R64-1-1.dna.toplevel.fa
+##contig=<ID=I,length=230218>
+##contig=<ID=II,length=813184>
+##contig=<ID=III,length=316620>
+##contig=<ID=IV,length=1531933>
+##contig=<ID=IX,length=439888>
+##contig=<ID=MT,length=85779>
+##contig=<ID=V,length=576874>
+##contig=<ID=VI,length=270161>
+##contig=<ID=VII,length=1090940>
+##contig=<ID=VIII,length=562643>
+##contig=<ID=X,length=745751>
+##contig=<ID=XI,length=666816>
+##contig=<ID=XII,length=1078177>
+##contig=<ID=XIII,length=924431>
+##contig=<ID=XIV,length=784333>
+##contig=<ID=XV,length=1091291>
+##contig=<ID=XVI,length=948066>
+##ALT=<ID=*,Description="Represents allele(s) other than observed.">
+##INFO=<ID=INDEL,Number=0,Type=Flag,Description="Indicates that the variant is an INDEL.">
+##INFO=<ID=IDV,Number=1,Type=Integer,Description="Maximum number of reads supporting an indel">
+##INFO=<ID=IMF,Number=1,Type=Float,Description="Maximum fraction of reads supporting an indel">
+##INFO=<ID=DP,Number=1,Type=Integer,Description="Raw read depth">
+##INFO=<ID=VDB,Number=1,Type=Float,Description="Variant Distance Bias for filtering splice-site artefacts in RNA-seq data (bigger is better)",Version="3">
+##INFO=<ID=RPB,Number=1,Type=Float,Description="Mann-Whitney U test of Read Position Bias (bigger is better)">
+##INFO=<ID=MQB,Number=1,Type=Float,Description="Mann-Whitney U test of Mapping Quality Bias (bigger is better)">
+##INFO=<ID=BQB,Number=1,Type=Float,Description="Mann-Whitney U test of Base Quality Bias (bigger is better)">
+##INFO=<ID=MQSB,Number=1,Type=Float,Description="Mann-Whitney U test of Mapping Quality vs Strand Bias (bigger is better)">
+##INFO=<ID=SGB,Number=1,Type=Float,Description="Segregation based metric.">
+##INFO=<ID=MQ0F,Number=1,Type=Float,Description="Fraction of MQ0 reads (smaller is better)">
+##FORMAT=<ID=PL,Number=G,Type=Integer,Description="List of Phred-scaled genotype likelihoods">
+##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
+##INFO=<ID=AF1,Number=1,Type=Float,Description="Max-likelihood estimate of the first ALT allele frequency (assuming HWE)">
+##INFO=<ID=AF2,Number=1,Type=Float,Description="Max-likelihood estimate of the first and second group ALT allele frequency (assuming HWE)">
+##INFO=<ID=AC1,Number=1,Type=Float,Description="Max-likelihood estimate of the first ALT allele count (no HWE assumption)">
+##INFO=<ID=MQ,Number=1,Type=Integer,Description="Root-mean-square mapping quality of covering reads">
+##INFO=<ID=FQ,Number=1,Type=Float,Description="Phred probability of all samples being the same">
+##INFO=<ID=PV4,Number=4,Type=Float,Description="P-values for strand bias, baseQ bias, mapQ bias and tail distance bias">
+##INFO=<ID=G3,Number=3,Type=Float,Description="ML estimate of genotype frequencies">
+##INFO=<ID=HWE,Number=1,Type=Float,Description="Chi^2 based HWE test P-value based on G3">
+##INFO=<ID=DP4,Number=4,Type=Integer,Description="Number of high-quality ref-forward , ref-reverse, alt-forward and alt-reverse bases">
+##bcftools_callVersion=1.9+htslib-1.9
+##bcftools_callCommand=call --ploidy 1 -O v -vc -o B04_Elli__S13_vars.vcf B04_Elli__S13.vcf; Date=Mon Mar 11 10:46:54 2024
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	B04_Elli__S13.bam
+chrX	648435	.	A	C	10.418	.	DP=4;VDB=0.06;SGB=-0.453602;MQ0F=0;AF1=1;AC1=1;DP4=0,0,2,0;MQ=22;FQ=-999	GT:PL	1:40,0
+chrX	648449	.	T	C	10.418	.	DP=4;VDB=0.1;SGB=-0.453602;MQ0F=0;AF1=1;AC1=1;DP4=0,0,2,0;MQ=22;FQ=-999	GT:PL	1:40,0
+chrX	648458	.	C	G	24.0219	.	DP=6;VDB=0.228191;SGB=-0.511536;MQ0F=0;AF1=1;AC1=1;DP4=0,0,3,0;MQ=22;FQ=-999	GT:PL	1:54,0
+chrX	648461	.	G	A	24.0219	.	DP=6;VDB=0.235765;SGB=-0.511536;MQ0F=0;AF1=1;AC1=1;DP4=0,0,3,0;MQ=22;FQ=-999	GT:PL	1:54,0
+chrX	648464	.	G	A	24.0219	.	DP=6;VDB=0.235765;SGB=-0.511536;MQ0F=0;AF1=1;AC1=1;DP4=0,0,3,0;MQ=22;FQ=-999	GT:PL	1:54,0
+chrX	648467	.	T	C	24.0219	.	DP=6;VDB=0.235765;SGB=-0.511536;MQ0F=0;AF1=1;AC1=1;DP4=0,0,3,0;MQ=22;FQ=-999	GT:PL	1:54,0
+chrX	648470	.	C	T	24.0219	.	DP=6;VDB=0.235765;SGB=-0.511536;MQ0F=0;AF1=1;AC1=1;DP4=0,0,3,0;MQ=22;FQ=-999	GT:PL	1:54,0
+chrX	648473	.	C	T	24.0219	.	DP=6;VDB=0.251321;SGB=-0.511536;MQ0F=0;AF1=1;AC1=1;DP4=0,0,3,0;MQ=22;FQ=-999	GT:PL	1:54,0
+chrX	648476	.	T	C	24.0219	.	DP=6;VDB=0.251321;SGB=-0.511536;MQ0F=0;AF1=1;AC1=1;DP4=0,0,3,0;MQ=22;FQ=-999	GT:PL	1:54,0
+chrX	648479	.	C	T	24.0219	.	DP=6;VDB=0.259298;SGB=-0.511536;MQ0F=0;AF1=1;AC1=1;DP4=0,0,3,0;MQ=22;FQ=-999	GT:PL	1:54,0
+chrX	648482	.	T	C	24.0219	.	DP=6;VDB=0.259298;SGB=-0.511536;MQ0F=0;AF1=1;AC1=1;DP4=0,0,3,0;MQ=22;FQ=-999	GT:PL	1:54,0
+chrX	648488	.	T	C	24.0219	.	DP=6;VDB=0.267404;SGB=-0.511536;MQ0F=0;AF1=1;AC1=1;DP4=0,0,3,0;MQ=22;FQ=-999	GT:PL	1:54,0
+chrX	648509	.	C	T	24.0219	.	DP=6;VDB=0.292464;SGB=-0.511536;MQ0F=0;AF1=1;AC1=1;DP4=0,0,3,0;MQ=22;FQ=-999	GT:PL	1:54,0
+chrX	648515	.	C	G	10.418	.	DP=4;VDB=0.42;SGB=-0.453602;MQ0F=0;AF1=1;AC1=1;DP4=0,0,2,0;MQ=22;FQ=-999	GT:PL	1:40,0
+chrX	648516	.	C	T	10.418	.	DP=4;VDB=0.42;SGB=-0.453602;MQ0F=0;AF1=1;AC1=1;DP4=0,0,2,0;MQ=22;FQ=-999	GT:PL	1:40,0
+chrX	648518	.	T	A	10.418	.	DP=4;VDB=0.42;SGB=-0.453602;MQ0F=0;AF1=1;AC1=1;DP4=0,0,2,0;MQ=22;FQ=-999	GT:PL	1:40,0
+chrX	648521	.	G	A	10.418	.	DP=4;VDB=0.42;SGB=-0.453602;MQ0F=0;AF1=1;AC1=1;DP4=0,0,2,0;MQ=22;FQ=-999	GT:PL	1:40,0
+chrX	648530	.	T	G	14.1739	.	DP=3;VDB=0.18;SGB=-0.453602;MQSB=1;MQ0F=0;AF1=1;AC1=1;DP4=0,0,1,1;MQ=22;FQ=-999	GT:PL	1:44,0
+chrX	648536	.	T	A	14.1739	.	DP=3;VDB=0.18;SGB=-0.453602;MQSB=1;MQ0F=0;AF1=1;AC1=1;DP4=0,0,1,1;MQ=22;FQ=-999	GT:PL	1:44,0
+chrX	648539	.	C	T	14.1739	.	DP=3;VDB=0.22;SGB=-0.453602;MQSB=1;MQ0F=0;AF1=1;AC1=1;DP4=0,0,1,1;MQ=22;FQ=-999	GT:PL	1:44,0
+chrX	648542	.	C	T	14.1739	.	DP=3;VDB=0.22;SGB=-0.453602;MQSB=1;MQ0F=0;AF1=1;AC1=1;DP4=0,0,1,1;MQ=22;FQ=-999	GT:PL	1:44,0
+chrXVI	831838	.	G	T	4.12714	.	DP=1;SGB=-0.379885;MQ0F=0;AF1=1;AC1=1;DP4=0,0,1,0;MQ=44;FQ=-999	GT:PL	1:32,0
